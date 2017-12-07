@@ -27,6 +27,8 @@ Just Hack, and have fun!
 1. Contents: Reverse Engineering
 2. Key take away: More into the world of CTF & Moving closure of Whitehats Just Hack
 
+
+## Each session will include
 Each session will include:
  - Workshop
  - Sample walkthrough
