@@ -1,26 +1,26 @@
-#Whitehats Just Hack
+# Whitehats Just Hack
 
-##Session 1
+## Session 1
 Contents: What is CTF? 'CTF Methodology'
 Key take away: CTF and the world of CyberSecurity
 
-##Session 2:
+## Session 2:
 Contents: Misc Puzzles (hashes, plain sight)
 Key take away: Think out of the box!
 
-##Session 3:
+## Session 3:
 Contents: Web Puzzles (SQLi, cookie)
 Key take away: Common web vulnerabilities
 
-##Session 4:
+## Session 4:
 Conents: Forensics
 Key take away: Different means of hiding data
 
-##Session 5:
+## Session 5:
 Contents: Vuln Hub VM (Can you get root?)
 Key take away: How a vulerability in a webpage can lead to total system comprimise
 
-##Session 6:
+## Session 6:
 Conetents: Reverse Engineering
 Key take away: More into the world of CTF & Moving closure of Whitehats Just Hack
 
