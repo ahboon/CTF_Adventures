@@ -1,5 +1,5 @@
 # Whitehats Just Hack
-Whitehats Just Hack aims to provide basic knowledge on CyberSecurity and CTF.
+...Whitehats Just Hack aims to provide basic knowledge on CyberSecurity and CTF. ..
 Just Hack, and have fun!
 
 
