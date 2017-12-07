@@ -1,0 +1,1 @@
+This folder is primarily used for the "CTF introductory" sessions of SMU Whitehats Society.
