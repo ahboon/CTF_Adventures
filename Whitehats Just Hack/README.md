@@ -28,8 +28,8 @@ Just Hack, and have fun!
 2. Key take away: More into the world of CTF & Moving closure of Whitehats Just Hack
 
 
-## Each session will include
-Each session will include:
+## Each session conosts of the following components
+Components:
  - Workshop
  - Sample walkthrough
  - Try out
