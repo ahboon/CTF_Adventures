@@ -11,3 +11,4 @@ My past adventures includes `TUCTF` and `inCTF`. Currently practicing `Web` and 
 
 Cheers!
 
+*Note: The screen name ***Gladiator*** was the name that I used for online-games. Hence, I adopted it.

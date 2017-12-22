@@ -1,0 +1,13 @@
+---
+layout: post
+title:  "Thoughts..."
+date:   2017-12-22 16:54:07 +0800
+categories: jekyll update
+---
+
+When I was first introduced to CTF, I know nothing about it. I was just a mere script kiddie. (skiddie? I think I still am one..)
+I was introduced to jeopardy style CTF in 2016, and it really caught my attention. It was not just about "cracking a system", but it was a computer puzzle in a form of Computer Security.
+It requires the knowledge of Computer Security in order to solve challenges to get flags. CTF has become my new "game", and I sign up for every single online CTF availble. (even if the challenges were way out of my league. for the lols maybe?)
+
+I will be participating in an upcoming offline CTF called JDC - Junior Defender Camp. Organized by `NTU OffSec`. Fingers crossed and hopefully I can solve all the challenges.
+
