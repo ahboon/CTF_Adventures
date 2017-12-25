@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/CTF_Adventures/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/CTF_Adventures/" rel="alternate" type="text/html" /><updated>2017-12-26T00:34:35+08:00</updated><id>http://localhost:4000/CTF_Adventures/</id><title type="html">CTF Adventures</title><subtitle>CTF Adventures. </subtitle><entry><title type="html">LazySysAdmin Writeup</title><link href="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin-Writeup.html" rel="alternate" type="text/html" title="LazySysAdmin Writeup" /><published>2017-12-25T16:54:07+08:00</published><updated>2017-12-25T16:54:07+08:00</updated><id>http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin%20Writeup</id><content type="html" xml:base="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin-Writeup.html">&lt;p&gt;Well. What better way to spend christmas than solving a VulbHub machine? This VM is built for beginner/intermediate difficulty level. Link to &lt;a href=&quot;https://www.vulnhub.com/entry/lazysysadmin-1,205/&quot;&gt;LazySysAdmin&lt;/a&gt; on VulnHub.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/CTF_Adventures/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/CTF_Adventures/" rel="alternate" type="text/html" /><updated>2017-12-26T00:57:52+08:00</updated><id>http://localhost:4000/CTF_Adventures/</id><title type="html">CTF Adventures</title><subtitle>CTF Adventures. </subtitle><entry><title type="html">LazySysAdmin Writeup</title><link href="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin-Writeup.html" rel="alternate" type="text/html" title="LazySysAdmin Writeup" /><published>2017-12-25T16:54:07+08:00</published><updated>2017-12-25T16:54:07+08:00</updated><id>http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin%20Writeup</id><content type="html" xml:base="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin-Writeup.html">&lt;p&gt;Well. What better way to spend christmas than solving a VulbHub machine? This VM is built for beginner/intermediate difficulty level. Link to &lt;a href=&quot;https://www.vulnhub.com/entry/lazysysadmin-1,205/&quot;&gt;LazySysAdmin&lt;/a&gt; on VulnHub.&lt;/p&gt;
 
 &lt;p&gt;I spent about two days on this, even though it could be done within three hours. So here is my writeup.&lt;/p&gt;
 
@@ -276,6 +276,29 @@ pf%&amp;amp;1nRpaj^68ZeV2St9GkdoDkj48Fl$MI97Zt2nebt02
 bhO!5Je65B6Z0bhZhQ3W64wL65wonnQ$@yw%Zhy0U19pu
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;h2 id=&quot;clearing-tracks&quot;&gt;Clearing Tracks&lt;/h2&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;Well… If this was a real scenario, you would not want to leave bread crumbs behind.&lt;/p&gt;
+
+&lt;p&gt;Since you are root, you can do whatever you want as root.
+So the following commands should clear most of your tracks..&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/syslog
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/auth.log
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/inspircd.log
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/apache2/access.log
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/apache2/error.log
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/mysql/error.log
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/mysql.err
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/mysql.log
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/samba/log.[Attacker machine IP Address]
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /var/log/wtmp
+rm .bash_history
+&lt;span class=&quot;nb&quot;&gt;history&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;the-end&quot;&gt;The End&lt;/h2&gt;
+&lt;hr /&gt;
 &lt;p&gt;And that’s it! Successfully found the treasure! (which is proof.txt)&lt;/p&gt;</content><author><name></name></author><summary type="html">Well. What better way to spend christmas than solving a VulbHub machine? This VM is built for beginner/intermediate difficulty level. Link to LazySysAdmin on VulnHub.</summary></entry><entry><title type="html">Thoughts…</title><link href="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/22/Thoughts.html" rel="alternate" type="text/html" title="Thoughts..." /><published>2017-12-22T16:54:07+08:00</published><updated>2017-12-22T16:54:07+08:00</updated><id>http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/22/Thoughts</id><content type="html" xml:base="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/22/Thoughts.html">&lt;p&gt;When I was first introduced to CTF, I know nothing about it. I was just a mere script kiddie. (skiddie? I think I still am one..)
 I was introduced to jeopardy style CTF in 2016, and it really caught my attention. It was not just about “cracking a system”, but it was a computer puzzle in a form of Computer Security.
 It requires the knowledge of Computer Security in order to solve challenges to get flags. CTF has become my new “game”, and I sign up for every single online CTF availble. (even if the challenges were way out of my league. for the lols maybe?)&lt;/p&gt;

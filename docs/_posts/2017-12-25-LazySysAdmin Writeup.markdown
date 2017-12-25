@@ -293,7 +293,33 @@ pf%&1nRpaj^68ZeV2St9GkdoDkj48Fl$MI97Zt2nebt02
 bhO!5Je65B6Z0bhZhQ3W64wL65wonnQ$@yw%Zhy0U19pu
 ```
 
+## Clearing Tracks
+---
+
+Well... If this was a real scenario, you would not want to leave bread crumbs behind. 
+
+Since you are root, you can do whatever you want as root.
+So the following commands should clear most of your tracks..
+```sh
+echo ' ' > /var/log/syslog
+echo ' ' > /var/log/auth.log
+echo ' ' > /var/log/inspircd.log
+echo ' ' > /var/log/apache2/access.log
+echo ' ' > /var/log/apache2/error.log
+echo ' ' > /var/log/mysql/error.log
+echo ' ' > /var/log/mysql.err
+echo ' ' > /var/log/mysql.log
+echo ' ' > /var/log/samba/log.[Attacker machine IP Address]
+echo ' ' > /var/log/wtmp
+rm .bash_history
+history -c
+```
+
+## The End
+---
 And that's it! Successfully found the treasure! (which is proof.txt)
+
+
 
 [lazysysadmin]: https://www.vulnhub.com/entry/lazysysadmin-1,205/
 [smbenum]: https://www.rapid7.com/db/modules/auxiliary/scanner/smb/smb_enumshares
