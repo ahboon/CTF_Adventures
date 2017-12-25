@@ -12,7 +12,7 @@ I spent about two days on this, even though it could be done within three hours.
 Of course, assuming download and import is done, lets examine this machine. I am using Kali Linux, but Ubuntu will be fine in my opinion. (Install what you need right?)
 
 ## Scanning
-
+---
 Since this is a VM challenge, my first instinct was to do scanning.
 
 Ping Scan:
@@ -108,7 +108,7 @@ HOP RTT     ADDRESS
 ```
 
 ## Enumeration
-
+---
 Knowing that Port 80 is open, without opening the web browser yet, lets use `nikto`.
 
 
@@ -184,7 +184,7 @@ With the following output:
 Lesson: NEVER keep the default admin. =)
 
 ## Gaining Access
-
+---
 So of course, the first thing to try for login is "username: admin ,password: admin". Well of course it didn't work. So I went on to try brute force attack instead. Well... Don't bother trying if you are thinking about it. =)
 
 I had to look somewhere else.. The system isn't just about the web application. It is just one of the vectors of entry. Looking back at the port scan, one particular port number stood out: `445/tcp  open  netbios-ssn Samba smbd 4.3.11-Ubuntu (workgroup: WORKGROUP)`. Yeap, `samba` was available. But in what way was it vulerable? The first thing I tried was using ***metasploit framework*** to take advantage of known CVE, but that didn't work. So it was yet another brick wall. After slacking off for about an hour, the word *enumeration* came to my head. I went ahead googling ***samba enumeration for metasploit*** (well I was kinda lazy to do it the non msfconsole way). This link helped me: [SAMBA ENUMERATION][smbenum].
@@ -213,7 +213,7 @@ For my php reverse shell codes, I configured the port to 4444. At my Kali Machin
 
 
 ## Priviledge Escalation
-
+---
 So since I have gained shell access, it was time to do priviledge escalation. Dirty c0w was last resort, so I went on checking if `nmap` was installed, because `nmap` has an interactive mode where commands can be used as root (No luck eventually). I also went on checking `/etc/passwd` to check out which other users exist on the system. The same can be done when I did `ls /home`. A particular user `togie` was on the system.
 
 Looking back at the \\192.168.56.101\share$, there was an interesting text file called "deets.txt". Insider it states: "CBF Remembering all these passwords. Remember to remove this file and update your password after we push out the server. Password 12345"

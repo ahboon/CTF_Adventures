@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/CTF_Adventures/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/CTF_Adventures/" rel="alternate" type="text/html" /><updated>2017-12-26T00:31:52+08:00</updated><id>http://localhost:4000/CTF_Adventures/</id><title type="html">CTF Adventures</title><subtitle>CTF Adventures. </subtitle><entry><title type="html">LazySysAdmin Writeup</title><link href="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin-Writeup.html" rel="alternate" type="text/html" title="LazySysAdmin Writeup" /><published>2017-12-25T16:54:07+08:00</published><updated>2017-12-25T16:54:07+08:00</updated><id>http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin%20Writeup</id><content type="html" xml:base="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin-Writeup.html">&lt;p&gt;Well. What better way to spend christmas than solving a VulbHub machine? This VM is built for beginner/intermediate difficulty level. Link to &lt;a href=&quot;https://www.vulnhub.com/entry/lazysysadmin-1,205/&quot;&gt;LazySysAdmin&lt;/a&gt; on VulnHub.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/CTF_Adventures/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/CTF_Adventures/" rel="alternate" type="text/html" /><updated>2017-12-26T00:34:35+08:00</updated><id>http://localhost:4000/CTF_Adventures/</id><title type="html">CTF Adventures</title><subtitle>CTF Adventures. </subtitle><entry><title type="html">LazySysAdmin Writeup</title><link href="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin-Writeup.html" rel="alternate" type="text/html" title="LazySysAdmin Writeup" /><published>2017-12-25T16:54:07+08:00</published><updated>2017-12-25T16:54:07+08:00</updated><id>http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin%20Writeup</id><content type="html" xml:base="http://localhost:4000/CTF_Adventures/jekyll/update/2017/12/25/LazySysAdmin-Writeup.html">&lt;p&gt;Well. What better way to spend christmas than solving a VulbHub machine? This VM is built for beginner/intermediate difficulty level. Link to &lt;a href=&quot;https://www.vulnhub.com/entry/lazysysadmin-1,205/&quot;&gt;LazySysAdmin&lt;/a&gt; on VulnHub.&lt;/p&gt;
 
 &lt;p&gt;I spent about two days on this, even though it could be done within three hours. So here is my writeup.&lt;/p&gt;
 
 &lt;p&gt;Of course, assuming download and import is done, lets examine this machine. I am using Kali Linux, but Ubuntu will be fine in my opinion. (Install what you need right?)&lt;/p&gt;
 
 &lt;h2 id=&quot;scanning&quot;&gt;Scanning&lt;/h2&gt;
-
+&lt;hr /&gt;
 &lt;p&gt;Since this is a VM challenge, my first instinct was to do scanning.&lt;/p&gt;
 
 &lt;p&gt;Ping Scan:
@@ -99,7 +99,7 @@ HOP RTT     ADDRESS
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;enumeration&quot;&gt;Enumeration&lt;/h2&gt;
-
+&lt;hr /&gt;
 &lt;p&gt;Knowing that Port 80 is open, without opening the web browser yet, lets use &lt;code class=&quot;highlighter-rouge&quot;&gt;nikto&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nikto -host http://192.168.56.101&lt;/code&gt;&lt;/p&gt;
@@ -172,7 +172,7 @@ Using &lt;code class=&quot;highlighter-rouge&quot;&gt;wpscan&lt;/code&gt;, we wi
 &lt;p&gt;Lesson: NEVER keep the default admin. =)&lt;/p&gt;
 
 &lt;h2 id=&quot;gaining-access&quot;&gt;Gaining Access&lt;/h2&gt;
-
+&lt;hr /&gt;
 &lt;p&gt;So of course, the first thing to try for login is “username: admin ,password: admin”. Well of course it didn’t work. So I went on to try brute force attack instead. Well… Don’t bother trying if you are thinking about it. =)&lt;/p&gt;
 
 &lt;p&gt;I had to look somewhere else.. The system isn’t just about the web application. It is just one of the vectors of entry. Looking back at the port scan, one particular port number stood out: &lt;code class=&quot;highlighter-rouge&quot;&gt;445/tcp  open  netbios-ssn Samba smbd 4.3.11-Ubuntu (workgroup: WORKGROUP)&lt;/code&gt;. Yeap, &lt;code class=&quot;highlighter-rouge&quot;&gt;samba&lt;/code&gt; was available. But in what way was it vulerable? The first thing I tried was using &lt;strong&gt;&lt;em&gt;metasploit framework&lt;/em&gt;&lt;/strong&gt; to take advantage of known CVE, but that didn’t work. So it was yet another brick wall. After slacking off for about an hour, the word &lt;em&gt;enumeration&lt;/em&gt; came to my head. I went ahead googling &lt;strong&gt;&lt;em&gt;samba enumeration for metasploit&lt;/em&gt;&lt;/strong&gt; (well I was kinda lazy to do it the non msfconsole way). This link helped me: &lt;a href=&quot;https://www.rapid7.com/db/modules/auxiliary/scanner/smb/smb_enumshares&quot;&gt;SAMBA ENUMERATION&lt;/a&gt;.&lt;/p&gt;
@@ -199,7 +199,7 @@ Using &lt;code class=&quot;highlighter-rouge&quot;&gt;wpscan&lt;/code&gt;, we wi
 &lt;p&gt;For my php reverse shell codes, I configured the port to 4444. At my Kali Machine, I set up the listener with the following command: &lt;code class=&quot;highlighter-rouge&quot;&gt;nc -nlvp 4444&lt;/code&gt;. Once the listener is running, I proceed to refresh the the wordpress home page. The page will ‘hang’, but looking back at my terminal where my netcat was running on, I have successfully gained shell access.&lt;/p&gt;
 
 &lt;h2 id=&quot;priviledge-escalation&quot;&gt;Priviledge Escalation&lt;/h2&gt;
-
+&lt;hr /&gt;
 &lt;p&gt;So since I have gained shell access, it was time to do priviledge escalation. Dirty c0w was last resort, so I went on checking if &lt;code class=&quot;highlighter-rouge&quot;&gt;nmap&lt;/code&gt; was installed, because &lt;code class=&quot;highlighter-rouge&quot;&gt;nmap&lt;/code&gt; has an interactive mode where commands can be used as root (No luck eventually). I also went on checking &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/passwd&lt;/code&gt; to check out which other users exist on the system. The same can be done when I did &lt;code class=&quot;highlighter-rouge&quot;&gt;ls /home&lt;/code&gt;. A particular user &lt;code class=&quot;highlighter-rouge&quot;&gt;togie&lt;/code&gt; was on the system.&lt;/p&gt;
 
 &lt;p&gt;Looking back at the \192.168.56.101\share$, there was an interesting text file called “deets.txt”. Insider it states: “CBF Remembering all these passwords. Remember to remove this file and update your password after we push out the server. Password 12345”&lt;/p&gt;
