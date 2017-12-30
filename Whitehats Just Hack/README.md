@@ -25,8 +25,8 @@ Just Hack, and have fun!
 2. Key take away: How a vulerability in a webpage can lead to total system comprimise
 
 ### Session 6:
-1. Contents: Reverse Engineering
-2. Key take away: More into the world of CTF & Moving closure of Whitehats Just Hack
+1. Contents: TBC
+2. Key take away: TBC
 
 
 ## Each session consists of the following components
