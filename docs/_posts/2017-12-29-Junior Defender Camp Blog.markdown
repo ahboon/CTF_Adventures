@@ -28,6 +28,7 @@ There were 11 teams:
 |        10. Access Denied       |
 |           11. SYNers           |
 
+
 From what I can recall, team "Not Found" consists of SIT students, and team "NUSGreyhats" consists of NUS students (duh), and I could not remember remainder teams. I was from team "Insects", and we were all from the same institution. 
 
 The compeition focused heavily on Web vulnerabilities such as Injection and Misconfigured web apps.
